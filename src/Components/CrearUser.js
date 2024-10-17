@@ -34,6 +34,7 @@ const CrearUser = () => {
     const userData = {
       firstname: values.firstname,
       lastname: values.lastname,
+      username: values.username,
       email: values.email,
       domicilio: values.domicilio,
       celular: values.celular,
@@ -98,6 +99,14 @@ const CrearUser = () => {
       <Form.Item
         name="lastname"
         label="Apellido"
+        rules={[{ required: true }]}
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item
+        name="username"
+        label="Nombre de Usuario"
         rules={[{ required: true }]}
       >
         <Input />

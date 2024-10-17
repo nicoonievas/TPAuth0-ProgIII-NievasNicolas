@@ -106,16 +106,16 @@ const TablaTasks = () => {
 
   const columns = [
     {
-      title: 'Nombre',
+      title: 'Tarea',
       dataIndex: 'name',
       key: 'name',
-      render: (text) => <a>{text}</a>,
+      
     },
     {
       title: 'Usuario',
-      key: 'user.lastname',
+      key: 'user.username',
       render: (_, record) => (
-        <span>{record.user && record.user.lastname ? record.user.lastname : 'Sin usuario'}</span>
+        <span>{record.user && record.user.username ? record.user.username : 'Sin usuario'}</span>
       ),
     },
     {

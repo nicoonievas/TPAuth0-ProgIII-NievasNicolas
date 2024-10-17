@@ -70,7 +70,7 @@ const TablaUsuarios = () => {
   const handleEdit = async (values) => {
     try {
       await axios.put(`https://prog-iii-swagger-nievas-nicolas.vercel.app/api/user/${currentUsuario._id}`, values);
-      
+
       // Actualizar el estado con los nuevos datos
       setUsuarios((prevUsuarios) =>
         prevUsuarios.map((usuario) =>
@@ -95,7 +95,7 @@ const TablaUsuarios = () => {
 
       // Actualizar el estado para eliminar el usuario
       setUsuarios((prevUsuarios) => prevUsuarios.filter((usuario) => usuario._id !== usuarioIdToDelete));
-    
+
       setIsDeleteModalVisible(false); // Cerrar el modal de eliminación
       openNotificationWithIcon('success', 'Usuario Eliminado', 'El usuario ha sido eliminado exitosamente.');
     } catch (error) {
@@ -105,10 +105,14 @@ const TablaUsuarios = () => {
 
   const columns = [
     {
-      title: 'Apellido',
-      dataIndex: 'lastname',
-      key: 'lastname',
-      render: (text) => <a>{text}</a>,
+      title: 'Usuario',
+      dataIndex: 'username',
+      key: 'username',
+    },
+    {
+      title: 'Nombre',
+      dataIndex: 'firstname',
+      key: 'firstname',
     },
     {
       title: 'Email',
@@ -174,7 +178,7 @@ const TablaUsuarios = () => {
         loading={loading}
       />
 
-      {/* Modal de Confirmación para Eliminación */} 
+      {/* Modal de Confirmación para Eliminación */}
       <Modal
         title="Confirmar Eliminación"
         visible={isDeleteModalVisible}
@@ -197,6 +201,14 @@ const TablaUsuarios = () => {
           form={form}
           onFinish={handleEdit}
         >
+          <Form.Item
+            name="firstname"
+            label="Nombre"
+            rules={[{ required: true, message: 'Por favor ingresa el apellido del usuario' }]}
+          >
+            <Input />
+          </Form.Item>
+
           <Form.Item
             name="lastname"
             label="Apellido"
