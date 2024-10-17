@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Form, Input, Select } from 'antd';
+import { Button, Form, Input, Select, notification } from 'antd';
 import axios from 'axios';
 
 const { Option } = Select;
@@ -14,26 +14,21 @@ const layout = {
 };
 
 const validateMessages = {
-  required: '${label} is required!',
+  required: '${label} es requerido!',
 };
 
-const CrearTasks = ({ taskToAdd }) => {
+const openNotificationWithIcon = (type, message, description) => {
+  notification[type]({
+    message,
+    description,
+  });
+};
+
+const CrearTasks = () => {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
-
-  useEffect(() => {
-    if (taskToAdd) {
-      form.setFieldsValue({
-        nombre: taskToAdd.nombre,
-        descripcion: taskToAdd.descripcion,
-        resumen: taskToAdd.resumen,
-        user: taskToAdd.user,
-      });
-      setSelectedUser(taskToAdd.user); // Cargar el usuario seleccionado si se está editando
-    }
-  }, [taskToAdd, form]);
 
   useEffect(() => {
     const fetchUsuarios = async () => {
@@ -46,8 +41,6 @@ const CrearTasks = ({ taskToAdd }) => {
         }
       } catch (error) {
         console.error('Error fetching users:', error);
-      } finally {
-        setLoading(false);
       }
     };
     fetchUsuarios();
@@ -55,36 +48,38 @@ const CrearTasks = ({ taskToAdd }) => {
 
   const onFinish = async (values) => {
     const taskData = {
-      name: values.task.name,
-      description: values.task.description,
-      resume: values.task.resume,
-      user: selectedUser?._id, // Usar el ID del usuario seleccionado
+      name: values.name,
+      description: values.description,
+      resume: values.resume,
+      user: selectedUser?._id,
     };
 
     try {
-        setLoading(true);
-        const response = await axios.post(
-          'https://prog-iii-swagger-nievas-nicolas.vercel.app/api/task',
-          taskData, // Axios automáticamente convierte el objeto en JSON
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          }
-        );
-      
-        if (response.status !== 200 && response.status !== 201) {
-          throw new Error('Error al crear la tarea');
+      setLoading(true);
+
+      const response = await axios.post(
+        'https://prog-iii-swagger-nievas-nicolas.vercel.app/api/task',
+        taskData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
         }
-      
-        const result = response.data;
-        console.log(result);
-        form.resetFields();
-      } catch (error) {
-        console.error('Error al crear la tarea:', error);
-      } finally {
-        setLoading(false); // Detener loading
+      );
+
+      if (!response.status === 200 && !response.status === 201) {
+        throw new Error('Error al crear la tarea');
       }
+
+      openNotificationWithIcon('success', 'Tarea agregada', 'La tarea ha sido agregada exitosamente.');
+      form.resetFields(); // Limpiar el formulario
+      setSelectedUser(null); // Limpiar usuario seleccionado
+    } catch (error) {
+      console.error('Error al crear la tarea:', error);
+      openNotificationWithIcon('error', 'Error', 'Hubo un problema al guardar la tarea.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleUserSelect = (userId) => {
@@ -95,13 +90,14 @@ const CrearTasks = ({ taskToAdd }) => {
   return (
     <Form
       {...layout}
+      form={form}
       name="crear-tasks"
       onFinish={onFinish}
       style={{ maxWidth: 600 }}
       validateMessages={validateMessages}
     >
       <Form.Item
-        name={['task', 'name']}
+        name="name"
         label="Nombre de la Tarea"
         rules={[{ required: true }]}
       >
@@ -109,14 +105,14 @@ const CrearTasks = ({ taskToAdd }) => {
       </Form.Item>
 
       <Form.Item
-        name={['task', 'description']}
-        label="Descripcion de la tarea"
+        name="description"
+        label="Descripción de la tarea"
       >
         <Input.TextArea />
       </Form.Item>
 
       <Form.Item
-        name={['task', 'resume']}
+        name="resume"
         label="Resumen de la tarea"
       >
         <Input.TextArea />

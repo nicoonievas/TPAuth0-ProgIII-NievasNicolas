@@ -28,6 +28,21 @@
   color: #61dafb;
 }
 
+h1 {
+  text-align: center;
+  font-size: 40px;
+  margin-top: 20px;
+  font-family: 'Courier New', Courier, monospace;
+  color: rgb(92, 143, 253);
+}
+h2 {
+  text-align: center;
+  font-size: 30px;
+  margin-top: 20px;
+  font-family: 'Courier New', Courier, monospace;
+  color: rgb(92, 143, 253);
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

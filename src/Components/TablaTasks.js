@@ -15,7 +15,7 @@ const TablaTasks = () => {
     pageSize: 10,
   });
   const [totalTasks, setTotalTasks] = useState(0);
-  const [form] = Form.useForm(); // Formulario para el modal de edición
+  const [form] = Form.useForm(); 
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -115,7 +115,7 @@ const TablaTasks = () => {
       title: 'Usuario',
       key: 'user.lastname',
       render: (_, record) => (
-        <span>{record.user && record.user.lastname ? record.user.lastname : 'sin usuario'}</span>
+        <span>{record.user && record.user.lastname ? record.user.lastname : 'Sin usuario'}</span>
       ),
     },
     {
