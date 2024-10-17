@@ -134,7 +134,7 @@ const CrearTasks = () => {
         >
           {users.map((user) => (
             <Option key={user._id} value={user._id}>
-              {`${user.lastname} - ${user.documento}`}
+              {`${user.username} - ${user.documento}`}
             </Option>
           ))}
         </Select>
